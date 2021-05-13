@@ -103,6 +103,9 @@ def validate(txt):
     #check for double notations | *
     if doublers_found(txt): return False
 
+    #check for end |
+    if list_of_ch[-1] == "|": return False
+    
     return True
 
 
