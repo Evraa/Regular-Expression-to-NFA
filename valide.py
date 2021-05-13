@@ -12,11 +12,10 @@ def rb_dont_match(list_of_ch):
     for ch in list_of_ch:
         if ch == "(":
             rb_stack.append("(")
-            # print (rb_stack)
         elif ch == ")":
             if len(rb_stack)==0: return True
             rb_stack.popleft()
-            # print (rb_stack)
+            
     
     if len(rb_stack)>=1: return True
     return False
@@ -84,27 +83,39 @@ def validate(txt):
     #remove spaces
     txt = txt.replace(" ","")
     #empty?
-    if txt == "": return False
+    if txt == "": 
+        print ("Error: RE can't be empty!")
+        return False
 
-    #check for digits
-    if re.search(r"\d",txt): return False
+    #check for digits: not sure of it!
+    # if re.search(r"\d",txt): 
+    #     print ("Error: RE can't include digits")
+    #     return False
 
     #find all (
     left_rb = re.findall(r"\(",txt)
     #find all )
     right_rb = re.findall(r"\)",txt)
     #check for length
-    if len(left_rb) != len(right_rb): return False
+    if len(left_rb) != len(right_rb): 
+        print ("Error: false number of rounded prakets!")
+        return False
     
     list_of_ch = split(txt)
     #check for ()
-    if rb_dont_match(list_of_ch): return False
+    if rb_dont_match(list_of_ch): 
+        print ("Error: Round prakets dont match!")
+        return False
     
     #check for double notations | *
-    if doublers_found(txt): return False
+    if doublers_found(txt): 
+        print ("An invalid sequence appeared!")
+        return False
 
     #check for end |
-    if list_of_ch[-1] == "|": return False
+    if list_of_ch[-1] == "|": 
+        print ("Error: RE no right side to OR with")
+        return False
     
     return True
 

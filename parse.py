@@ -19,8 +19,8 @@ def parse_astrisk(list_of_ch):
         #append the char
         if close_it:
             close_it = False
-            new_list.append(")")
             new_list.append('*')
+            new_list.append(")")
             
         else:
             new_list.append(ch)
