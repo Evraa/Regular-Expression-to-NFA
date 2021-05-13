@@ -13,7 +13,7 @@ def parse_astrisk(list_of_ch):
 
         if ch =="*" and prev_ch != ")":
             #for sure it's a character
-            new_list.insert(-2,"(")
+            new_list.insert(-1,"(")
             close_it = True
 
         #append the char
@@ -22,7 +22,6 @@ def parse_astrisk(list_of_ch):
             new_list.append(")")
             new_list.append('*')
             
-        
         else:
             new_list.append(ch)
 
