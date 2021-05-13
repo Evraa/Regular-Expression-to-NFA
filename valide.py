@@ -72,6 +72,7 @@ def doublers_found(txt):
 
 
 
+
 def validate(txt):
     '''
     Validation function, consist of several parts:
@@ -101,7 +102,6 @@ def validate(txt):
     
     #check for double notations | *
     if doublers_found(txt): return False
-    
 
     return True
 
