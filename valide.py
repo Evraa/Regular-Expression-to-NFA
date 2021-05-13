@@ -22,6 +22,24 @@ def rb_dont_match(list_of_ch):
     if len(rb_stack)>=1: return True
     return False
 
+
+def doublers_found(txt):
+    '''
+        check for these patterns |* *| || ** ..etc.
+    '''
+    txt = txt.replace(" ","")
+    res = re.finditer("[|*]", txt)
+    
+    prev = -1
+    for i,r in enumerate(res):
+        ind = r.start()
+        if ind-prev <= 1: return True
+        prev = ind
+    
+    return False
+
+
+
 def validate(txt):
     '''
     Validation function, consist of several parts:
@@ -40,8 +58,12 @@ def validate(txt):
     #check for length
     if len(left_rb) != len(right_rb): return False
     
+    list_of_ch = split(txt)
     #check for ()
-    if rb_dont_match(split(txt)): return False
+    if rb_dont_match(list_of_ch): return False
+    
+    #check for double notations | *
+    if doublers_found(txt): return False
     
 
     return True
