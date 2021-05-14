@@ -126,6 +126,6 @@ def validate(txt):
 
 
 
-if __name__ == "__main__":
-    txt = str(input("Insert RE:\n"))
-    print(validate(txt))
+# if __name__ == "__main__":
+#     txt = str(input("Insert RE:\n"))
+#     print(validate(txt))

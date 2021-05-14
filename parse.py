@@ -1,5 +1,5 @@
 import re
-
+import valide
 
 
 def split(word):
@@ -77,11 +77,14 @@ def parse(txt):
     list_of_ch = parse_asterisk(list_of_ch)
     txt = join_str(list_of_ch)
     list_of_ch = parse_consecutive(txt, list_of_ch)
+    txt = join_str(list_of_ch)
     
 
-    print (list_of_ch)
+    return (txt)
 
 
-if __name__ == "__main__":
-    txt = str(input("Insert RE:\n"))
-    parse(txt)
+# if __name__ == "__main__":
+#     txt = str(input("Insert RE:\n"))
+#     valide.validate(txt)
+#     parse(txt)
+    
