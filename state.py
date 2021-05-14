@@ -62,6 +62,11 @@ def terminate():
     last_node.right_rb = True #doen't matter btw.
     last_node.end = True
 
+def left_bracket():
+    last_node.left_rb = True
+
+def right_bracket():
+    last_node.right_rb = True
 
 def state(txt):
     global i, main_list, eps, last_node
@@ -73,24 +78,26 @@ def state(txt):
     init_nodes()
     print_main_list()
     rb_stack = deque()
-    
+    first_bracket = False
     for ch in txt:
         if ch == "(":
+            if not first_bracket: first_bracket = True
+            else:
+                left_bracket()
             rb_stack.append("(")
             
         elif ch == ")":
-            #just check.
-            if len(rb_stack)==0: sys.exit(0)
             if len(rb_stack)==1: #last one
                 #this is end (TERMINATE)
                 terminate()
             else:
                 #7war
-                pass
+                right_bracket()
+                
+            rb_stack.pop()
         else:
             concatenate(ch)
-        print_main_list()
-
+        
 
 
 if __name__ == "__main__":
@@ -101,9 +108,11 @@ if __name__ == "__main__":
     last_node = None
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    # txt = parse.parse(txt)
     txt = "(ab)"
+    txt = parse.parse(txt)
     state(txt)
+    print_main_list(short=False)
+
     
 
 
