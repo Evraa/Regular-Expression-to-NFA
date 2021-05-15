@@ -87,18 +87,18 @@ def asterisk(last_open_bracket):
 
     #find last_node's dad
     last_dad = None
-    bracket_dad = None
+    # bracket_dad = None
 
     for n in main_list:
         for c in n.children:
             if c[0].id == last_node.id:
                 last_dad = n
 
-            if c[0].id == last_open_bracket.id:
-                bracket_dad = n
+            # if c[0].id == last_open_bracket.id:
+            #     bracket_dad = n
 
 
-    bracket_dad.add_child(last_node, eps) 
+    last_open_bracket.add_child(last_node, eps) 
    
     last_dad.add_child(last_open_bracket, eps)
 
@@ -135,7 +135,7 @@ def state(txt):
         else:
             concatenate(ch)
         
-        print_main_list()
+        # print_main_list()
 
 if __name__ == "__main__":
     #Globals
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     first_node = None
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "ab*"
+    txt = "(ba)*"
     txt = parse.parse(txt)
     print(txt)
     init_nodes()
