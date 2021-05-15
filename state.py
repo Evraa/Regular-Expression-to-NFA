@@ -64,8 +64,8 @@ def concatenate(char_to):
     #fetch last node
     si = Node(id=i)
     i+=1
-    main_list.append(si)
     main_list[-1].add_child(si, char_to)
+    main_list.append(si)
     #create new empty one with eps.
     sj = Node(id=i)
     i+=1
@@ -133,7 +133,8 @@ def shift_update_first():
     main_list.clear()
     main_list = copy.deepcopy(spare_list)
     i +=1
-    return s0
+   
+    return s0.id
     
 
 def shift_update(last_open_bracket):
@@ -165,7 +166,8 @@ def shift_update(last_open_bracket):
     main_list = copy.deepcopy(spare_list)
 
     i +=1
-    return s0
+
+    return s0.id
 
 
         
@@ -178,19 +180,19 @@ def oring(last_open_bracket) -> None:
     main_list[-1].open_or = True
 
     if last_open_bracket == first_node: 
-        new_main_or = shift_update_first()
+        new_main_or_id = shift_update_first()
     else:
-        new_main_or = shift_update(last_open_bracket)
+        new_main_or_id = shift_update(last_open_bracket)
 
 
     new_last = Node (id=i)
-    main_list[-1].add_child(new_last, eps)
-
-    main_list[-1] = new_last
+    for n in main_list:
+        if n.id == new_main_or_id:
+            n.add_child(new_last, eps)
 
     main_list.append(new_last)
     i += 1
-    return new_main_or
+    return new_main_or_id
 
 
 def state(txt):
@@ -199,7 +201,7 @@ def state(txt):
     rb_stack = deque()
     first_bracket = False
     last_open_bracket = first_node
-    new_main_or = None
+    new_main_or_id = None
 
     for ch in txt:
         if ch == "(":
@@ -216,7 +218,7 @@ def state(txt):
                 #this is end (TERMINATE)
                 terminate()
             else:
-                right_bracket(new_main_or)
+                right_bracket(new_main_or_id)
                 rb_stack.pop()
                 last_open_bracket = rb_stack[-1]
 
@@ -224,7 +226,7 @@ def state(txt):
             asterisk(last_open_bracket)
         
         elif ch == "|":
-            new_main_or = oring(last_open_bracket)
+            new_main_or_id = oring(last_open_bracket)
             
         else:
             concatenate(ch)
