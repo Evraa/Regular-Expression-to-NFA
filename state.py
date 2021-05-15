@@ -6,14 +6,14 @@ import copy
 
 class Node:
     def __init__(self, start=False, end=False, left_rb=False, right_rb=False, 
-                main_or=False, open_or=False, id=None) -> None:
+                main_or=False, open_or=False, id=None,opened_to=None) -> None:
         self.start = start
         self.end = end
         self.left_rb=left_rb
         self.right_rb = right_rb
         self.main_or = main_or
         self.open_or = open_or
-        
+        self.opened_to = opened_to
         self.id = id
         self.children = []
 
@@ -89,13 +89,18 @@ def left_bracket():
 
     main_list[-1].left_rb = True
 
-def right_bracket(new_main_or):
+def right_bracket(new_main_or_id):
     global main_list,first_node,  eps, i
     
-    if new_main_or is not None:
+    if new_main_or_id is not None:
         #there's a OR that we need to close
         new_last = Node (id=i)
 
+        for n in main_list:
+            if n.opened_to == new_main_or_id:
+                n.add_child(new_last,eps)
+        main_list[-1].add_child(new_last, eps)
+        main_list.append(new_last)
 
     else:
         main_list[-1].right_rb = True
@@ -177,12 +182,14 @@ def oring(last_open_bracket) -> None:
     global main_list,first_node, eps, i
 
     #stuffing and shifting
-    main_list[-1].open_or = True
-
+    
     if last_open_bracket == first_node: 
         new_main_or_id = shift_update_first()
     else:
         new_main_or_id = shift_update(last_open_bracket)
+
+    main_list[-1].open_or = True
+    main_list[-1].opened_to = new_main_or_id
 
 
     new_last = Node (id=i)
@@ -214,13 +221,17 @@ def state(txt):
                 rb_stack.append(main_list[-1])
             
         elif ch == ")":
-            if len(rb_stack)==1: #last one
+            if len(rb_stack)==1 and new_main_or_id is None: #last one
                 #this is end (TERMINATE)
                 terminate()
             else:
                 right_bracket(new_main_or_id)
+                new_main_or_id = None
                 rb_stack.pop()
-                last_open_bracket = rb_stack[-1]
+                if len(rb_stack) <= 1:
+                    terminate()
+                else:
+                    last_open_bracket = rb_stack[-1]
 
         elif ch == "*":
             asterisk(last_open_bracket)
