@@ -87,7 +87,6 @@ def asterisk(last_open_bracket):
 
     #find last_node's dad
     last_dad = None
-    # bracket_dad = None
 
     for n in main_list:
         for c in n.children:
@@ -114,12 +113,13 @@ def state(txt):
     last_open_bracket = first_node
     for ch in txt:
         if ch == "(":
-            if not first_bracket: first_bracket = True
+            if not first_bracket: 
+                rb_stack.append(first_node)
+                first_bracket = True
             else:
                 last_open_bracket = last_node
                 left_bracket()
-
-            rb_stack.append("(")
+                rb_stack.append(last_node)
             
         elif ch == ")":
             if len(rb_stack)==1: #last one
@@ -127,7 +127,8 @@ def state(txt):
                 terminate()
             else:
                 right_bracket()
-            rb_stack.pop()
+                rb_stack.pop()
+                last_open_bracket = rb_stack[-1]
 
         elif ch == "*":
             asterisk(last_open_bracket)
@@ -146,7 +147,8 @@ if __name__ == "__main__":
     first_node = None
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "(ba)*"
+    txt = "(a*b*)*"
+
     txt = parse.parse(txt)
     print(txt)
     init_nodes()
