@@ -1,6 +1,7 @@
 import valide, parse
 from collections import deque
 import sys
+import copy
 
 class Node:
     def __init__(self, start=False, end=False, left_rb=False, right_rb=False, 
@@ -53,10 +54,6 @@ def print_main_list(short=True):
 def concatenate(char_to):
     global i, main_list, eps, last_node
     #fetch last node
-
-    # last_node.to_node = i
-    # last_node.char_to = char_to
-
     si = Node(id=i)
     i+=1
     main_list.append(si)
@@ -75,6 +72,13 @@ def terminate():
     last_node.end = True
 
 def left_bracket():
+    global i, main_list, eps, last_node
+    
+    if last_node.left_rb:
+        si = Node (id=i, left_rb=True) 
+        main_list.append(si)
+        last_node = si
+        
     last_node.left_rb = True
 
 def right_bracket():
@@ -93,24 +97,43 @@ def asterisk(last_open_bracket):
             if c[0].id == last_node.id:
                 last_dad = n
 
-            # if c[0].id == last_open_bracket.id:
-            #     bracket_dad = n
-
-
     last_open_bracket.add_child(last_node, eps) 
    
     last_dad.add_child(last_open_bracket, eps)
 
 
+def shift_update_first():
+    global main_list, first_node, last_node, eps, i, spare_list
+    s0 = Node(id=0, start=True, left_rb=False, main_or=True)
+    s0.add_child(first_node, eps)
+    spare_list = []
+    spare_list.append(s0)
+
+    for n in main_list:
+        n.id += 1
+        spare_list.append(n)
+
+    main_list.clear()
+    main_list = copy.deepcopy(spare_list)
+    
+
+def oring(last_open_bracket, opened_or) -> None:
+    global main_list,first_node, last_node, eps, i
+
+    if last_open_bracket == first_node: 
+        shift_update_first()
+    else:
+        pass
+
+
 def state(txt):
     global i, main_list, eps, last_node, first_node
-    
-    '''
 
-    '''
     rb_stack = deque()
     first_bracket = False
     last_open_bracket = first_node
+    opened_or = None
+
     for ch in txt:
         if ch == "(":
             if not first_bracket: 
@@ -132,11 +155,13 @@ def state(txt):
 
         elif ch == "*":
             asterisk(last_open_bracket)
-            
+        
+        elif ch == "|":
+            oring(last_open_bracket, opened_or)
+            print_main_list()
         else:
             concatenate(ch)
         
-        # print_main_list()
 
 if __name__ == "__main__":
     #Globals
@@ -145,9 +170,10 @@ if __name__ == "__main__":
     eps = 'e'
     last_node = None
     first_node = None
+    spare_list = []
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "(a*b*)*"
+    txt = "a|b"
 
     txt = parse.parse(txt)
     print(txt)
