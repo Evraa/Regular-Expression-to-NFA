@@ -85,6 +85,7 @@ def left_bracket():
     if main_list[-1].left_rb:
         si = Node (id=i, left_rb=True) 
         main_list.append(si)
+        i += 1
         # main_list[-1] = si
 
     main_list[-1].left_rb = True
@@ -95,7 +96,7 @@ def right_bracket(new_main_or_id):
     if new_main_or_id is not None:
         #there's a OR that we need to close
         new_last = Node (id=i)
-
+        i += 1
         for n in main_list:
             if n.opened_to == new_main_or_id:
                 n.add_child(new_last,eps)
@@ -104,6 +105,8 @@ def right_bracket(new_main_or_id):
 
     else:
         main_list[-1].right_rb = True
+
+    
 
 
 def asterisk(last_open_bracket):
@@ -137,8 +140,7 @@ def shift_update_first():
 
     main_list.clear()
     main_list = copy.deepcopy(spare_list)
-    i +=1
-   
+    
     return s0.id
     
 
@@ -152,9 +154,10 @@ def shift_update(last_open_bracket):
     for itr,n in enumerate(main_list):
 
         if itr < last_open_bracket.id:
-            if last_open_bracket.id - itr == 1:
-                n.remove_child(last_open_bracket.id)
-                n.add_child(s0, eps)
+            for c in n.children:
+                if c[0].id == last_open_bracket.id:
+                    n.remove_child(last_open_bracket.id)
+                    n.add_child(s0, eps)
 
             spare_list.append(n)
 
@@ -170,8 +173,7 @@ def shift_update(last_open_bracket):
     main_list.clear()
     main_list = copy.deepcopy(spare_list)
 
-    i +=1
-
+    
     return s0.id
 
 
@@ -185,9 +187,10 @@ def oring(last_open_bracket) -> None:
     
     if last_open_bracket == first_node: 
         new_main_or_id = shift_update_first()
+        
     else:
         new_main_or_id = shift_update(last_open_bracket)
-
+    i += 1
     main_list[-1].open_or = True
     main_list[-1].opened_to = new_main_or_id
 
@@ -208,7 +211,7 @@ def state(txt):
     rb_stack = deque()
     first_bracket = False
     last_open_bracket = first_node
-    new_main_or_id = None
+    new_main_or_id_list = []
 
     for ch in txt:
         if ch == "(":
@@ -221,13 +224,17 @@ def state(txt):
                 rb_stack.append(main_list[-1])
             
         elif ch == ")":
-            if len(rb_stack)==1 and new_main_or_id is None: #last one
+            if len(rb_stack)==1 and len(new_main_or_id_list)==0: #last one
                 #this is end (TERMINATE)
                 terminate()
             else:
-                right_bracket(new_main_or_id)
-                new_main_or_id = None
+                right_bracket(new_main_or_id_list[-1])
+                new_main_or_id_list = new_main_or_id_list[:-1]
+                last_open_bracket.left_rb = False
                 rb_stack.pop()
+                if len(rb_stack) != 0:
+                    last_open_bracket = rb_stack[-1]
+
                 if len(rb_stack) <= 1:
                     terminate()
                 else:
@@ -238,6 +245,7 @@ def state(txt):
         
         elif ch == "|":
             new_main_or_id = oring(last_open_bracket)
+            new_main_or_id_list.append(new_main_or_id)
             
         else:
             concatenate(ch)
@@ -256,7 +264,7 @@ if __name__ == "__main__":
     spare_list = []
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "a|b"
+    txt = "(A|B)|(C|D)"
 
     txt = parse.parse(txt)
     print(txt)
