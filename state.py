@@ -124,11 +124,13 @@ def shift_update_first():
 
     main_list.clear()
     main_list = copy.deepcopy(spare_list)
+    i +=1
+    return s0
     
 
 def shift_update(last_open_bracket):
     global main_list, first_node, last_node, eps, i, spare_list
-
+    
     s0 = Node(id=last_open_bracket.id, main_or=True)
     s0.add_child(last_open_bracket, eps)
     spare_list = []
@@ -154,18 +156,32 @@ def shift_update(last_open_bracket):
     main_list.clear()
     main_list = copy.deepcopy(spare_list)
 
+    i +=1
+    return s0
+
 
         
     
 
-def oring(last_open_bracket, opened_or) -> None:
+def oring(last_open_bracket) -> None:
     global main_list,first_node, last_node, eps, i
 
     #stuffing and shifting
+    last_node.open_or = True
+
     if last_open_bracket == first_node: 
-        shift_update_first()
+        new_main_or = shift_update_first()
     else:
-        shift_update(last_open_bracket)
+        new_main_or = shift_update(last_open_bracket)
+
+    new_last = Node (id=i)
+    main_list[-1].add_child(new_last, eps)
+
+    last_node = new_last
+
+    main_list.append(new_last)
+    i += 1
+    return new_main_or
 
 
 def state(txt):
@@ -174,7 +190,7 @@ def state(txt):
     rb_stack = deque()
     first_bracket = False
     last_open_bracket = first_node
-    opened_or = None
+    new_main_or = None
 
     for ch in txt:
         if ch == "(":
@@ -199,11 +215,13 @@ def state(txt):
             asterisk(last_open_bracket)
         
         elif ch == "|":
-            print_main_list()
-            oring(last_open_bracket, opened_or)
-            print_main_list()
+            new_main_or = oring(last_open_bracket)
+            
         else:
             concatenate(ch)
+
+        print (ch)
+        print_main_list()
         
 
 if __name__ == "__main__":
