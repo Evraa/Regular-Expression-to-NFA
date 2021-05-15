@@ -1,3 +1,4 @@
+import enum
 import valide, parse
 from collections import deque
 import sys
@@ -21,7 +22,14 @@ class Node:
         self.children.append(child_state)
         return
 
+    def remove_child(self, child_id):
+        new_children = []
+        for c in self.children:
+            if c[0].id != child_id:
+                new_children.append(c)
 
+        self.children.clear()
+        self.children = copy.deepcopy(new_children)
 
 def init_nodes():
     global i, main_list, eps, last_node, first_node
@@ -78,7 +86,7 @@ def left_bracket():
         si = Node (id=i, left_rb=True) 
         main_list.append(si)
         last_node = si
-        
+
     last_node.left_rb = True
 
 def right_bracket():
@@ -104,6 +112,7 @@ def asterisk(last_open_bracket):
 
 def shift_update_first():
     global main_list, first_node, last_node, eps, i, spare_list
+    first_node.start = False
     s0 = Node(id=0, start=True, left_rb=False, main_or=True)
     s0.add_child(first_node, eps)
     spare_list = []
@@ -117,13 +126,46 @@ def shift_update_first():
     main_list = copy.deepcopy(spare_list)
     
 
+def shift_update(last_open_bracket):
+    global main_list, first_node, last_node, eps, i, spare_list
+
+    s0 = Node(id=last_open_bracket.id, main_or=True)
+    s0.add_child(last_open_bracket, eps)
+    spare_list = []
+
+    for itr,n in enumerate(main_list):
+
+        if itr < last_open_bracket.id:
+            if last_open_bracket.id - itr == 1:
+                n.remove_child(last_open_bracket.id)
+                n.add_child(s0, eps)
+
+            spare_list.append(n)
+
+        elif itr == last_open_bracket.id:
+            spare_list.append(s0)
+            spare_list.append(last_open_bracket)
+
+        elif itr > last_open_bracket.id:
+            n.id += 1
+            spare_list.append(n)
+
+    last_open_bracket.id += 1
+    main_list.clear()
+    main_list = copy.deepcopy(spare_list)
+
+
+        
+    
+
 def oring(last_open_bracket, opened_or) -> None:
     global main_list,first_node, last_node, eps, i
 
+    #stuffing and shifting
     if last_open_bracket == first_node: 
         shift_update_first()
     else:
-        pass
+        shift_update(last_open_bracket)
 
 
 def state(txt):
@@ -157,6 +199,7 @@ def state(txt):
             asterisk(last_open_bracket)
         
         elif ch == "|":
+            print_main_list()
             oring(last_open_bracket, opened_or)
             print_main_list()
         else:
@@ -180,7 +223,7 @@ if __name__ == "__main__":
     init_nodes()
     
     state(txt)
-    print_main_list(short=True)
+    # print_main_list(short=False)
 
     
 
