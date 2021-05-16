@@ -1,5 +1,8 @@
+import enum
 import re
+from typing import NewType
 import valide
+from collections import deque
 
 
 def split(word):
@@ -67,7 +70,36 @@ def parse_consecutive(txt, list_of_ch):
 
 
 
+def remove_repeated_brackets(txt):
+    rb_stack = deque()
+    pairs = []
+    for i,ch in enumerate(txt):
+        if ch == "(":
+            rb_stack.append([0,i])
+        elif ch == ")":
+            my_bracket = rb_stack.pop()
+            pairs.append([my_bracket[1], i])
+    
+    
+    last = pairs[-1]
+    truncation_level = 0
+    for i,p in enumerate(reversed(pairs)):
+        if i == 0: continue
 
+        if abs(p[0] - last[0]) == 1 and abs(p[1] - last[1]) == 1:
+            truncation_level += 1
+        else:
+            break
+        
+        last = p
+    
+        new_txt = ""
+        length = len(txt)
+    for i, ch in enumerate(txt):
+        if i < truncation_level or i>=length-truncation_level: continue
+        new_txt += ch
+
+    return new_txt
 
 def parse(txt):
     #remove spaces
@@ -78,13 +110,14 @@ def parse(txt):
     txt = join_str(list_of_ch)
     list_of_ch = parse_consecutive(txt, list_of_ch)
     txt = join_str(list_of_ch)
-    
+    txt = remove_repeated_brackets(txt)
 
     return (txt)
 
 
-# if __name__ == "__main__":
-#     txt = str(input("Insert RE:\n"))
-#     valide.validate(txt)
-#     parse(txt)
+if __name__ == "__main__":
+    # txt = str(input("Insert RE:\n"))
+    # valide.validate(txt)
+    # txt = "((((a)|(B))))"
+    # parse(txt)
     

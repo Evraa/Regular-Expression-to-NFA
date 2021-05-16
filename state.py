@@ -1,4 +1,3 @@
-import enum
 import valide, parse
 from collections import deque
 import sys
@@ -250,8 +249,7 @@ def state(txt):
         else:
             concatenate(ch)
 
-        print (ch)
-        print_main_list()
+        
         
 
 if __name__ == "__main__":
@@ -264,14 +262,16 @@ if __name__ == "__main__":
     spare_list = []
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "(A|B)|(C|D)"
+    txt = "(a|b)"
 
     txt = parse.parse(txt)
     print(txt)
     init_nodes()
     
     state(txt)
-    # print_main_list(short=False)
+    print_main_list(short=False)
+    print_main_list(short=True)
+    
 
     
 
