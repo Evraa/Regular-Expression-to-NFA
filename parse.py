@@ -93,10 +93,11 @@ def remove_repeated_brackets(txt):
         
         last = p
     
-        new_txt = ""
-        length = len(txt)
+    new_txt = ""
+    L = len(txt)
+        
     for i, ch in enumerate(txt):
-        if i < truncation_level or i>=length-truncation_level: continue
+        if i < truncation_level or i>=L-truncation_level: continue
         new_txt += ch
 
     return new_txt
@@ -115,7 +116,7 @@ def parse(txt):
     return (txt)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
     # txt = "((((a)|(B))))"

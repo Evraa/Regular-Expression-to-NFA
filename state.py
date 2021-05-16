@@ -83,6 +83,7 @@ def left_bracket():
     
     if main_list[-1].left_rb:
         si = Node (id=i, left_rb=True) 
+        main_list[-1].add_child(si, eps)
         main_list.append(si)
         i += 1
         # main_list[-1] = si
@@ -204,6 +205,26 @@ def oring(last_open_bracket) -> None:
     return new_main_or_id
 
 
+def pair_me(txt):
+    rb_stack = deque()
+    pairs = []
+    for i,ch in enumerate(txt):
+        if ch == "(":
+            rb_stack.append([0,i])
+        elif ch == ")":
+            my_bracket = rb_stack.pop()
+            pairs.append([my_bracket[1], i])
+    return pairs
+
+def find_my_partner(x,pairs):
+    for p in pairs:
+        if p[1] == x: return p[0]
+    print ("Error: bracket doesnt exist ya ngm")
+
+def or_within(txt, y, x):
+    for i in range (y,x):
+        if txt[i] == "|": return True
+    return False
 def state(txt):
     global i, main_list, eps, first_node
 
@@ -211,8 +232,10 @@ def state(txt):
     first_bracket = False
     last_open_bracket = first_node
     new_main_or_id_list = []
+    pairs = pair_me(txt)
 
-    for ch in txt:
+    for itr,ch in enumerate(txt):
+        print(ch)
         if ch == "(":
             if not first_bracket: 
                 rb_stack.append(first_node)
@@ -227,8 +250,19 @@ def state(txt):
                 #this is end (TERMINATE)
                 terminate()
             else:
-                right_bracket(new_main_or_id_list[-1])
-                new_main_or_id_list = new_main_or_id_list[:-1]
+                #check that ) closes an OR
+                y = find_my_partner(itr,pairs)
+                if or_within(txt, y, itr):
+                    if len(new_main_or_id_list) >= 1:
+                        last_opened_or_id = new_main_or_id_list[-1]
+                        new_main_or_id_list = new_main_or_id_list[:-1]
+                    else:
+                        last_opened_or_id = None
+
+                    right_bracket(last_opened_or_id)
+                else:
+                    right_bracket(None)
+                
                 last_open_bracket.left_rb = False
                 rb_stack.pop()
                 if len(rb_stack) != 0:
@@ -248,7 +282,8 @@ def state(txt):
             
         else:
             concatenate(ch)
-
+            
+        print_main_list()
         
         
 
@@ -262,7 +297,7 @@ if __name__ == "__main__":
     spare_list = []
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "(a|b)"
+    txt = "(ax|b)|(c|re)"
 
     txt = parse.parse(txt)
     print(txt)
@@ -277,3 +312,15 @@ if __name__ == "__main__":
 
 
 
+'''
+    Correct Test cases:
+        a|b
+        a*|b
+        a*|b*
+        a|b|c
+        a*|b|c
+        a*|b*|c
+        a*|b*|c*
+        (ax|b)|c
+        
+'''

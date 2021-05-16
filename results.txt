@@ -1,0 +1,110 @@
+a|b
+Node: 0         to node:1       char:e
+Node: 0         to node:5       char:e
+Node: 1         to node:2       char:e
+Node: 2         to node:3       char:a
+Node: 3         to node:4       char:e
+Node: 4         to node:8       char:e
+Node: 5         to node:6       char:b
+Node: 6         to node:7       char:e
+Node: 7         to node:8       char:e
+Node: 8         to node:None    char:None
+##########EOF############
+
+a*|b
+Node: 0         to node:1       char:e
+Node: 0         to node:5       char:e
+Node: 1         to node:2       char:e
+Node: 2         to node:3       char:a
+Node: 2         to node:4       char:e
+Node: 3         to node:4       char:e
+Node: 3         to node:2       char:e
+Node: 4         to node:8       char:e
+Node: 5         to node:6       char:b
+Node: 6         to node:7       char:e
+Node: 7         to node:8       char:e
+Node: 8         to node:None    char:None
+##########EOF############
+
+a*|b*
+Node: 0         to node:1       char:e
+Node: 0         to node:5       char:e
+Node: 1         to node:2       char:e
+Node: 2         to node:3       char:a
+Node: 2         to node:4       char:e
+Node: 3         to node:4       char:e
+Node: 3         to node:2       char:e
+Node: 4         to node:8       char:e
+Node: 5         to node:6       char:b
+Node: 5         to node:7       char:e
+Node: 6         to node:7       char:e
+Node: 6         to node:5       char:e
+Node: 7         to node:8       char:e
+Node: 8         to node:None    char:None
+##########EOF############
+
+a|b|c
+Node: 0         to node:1       char:e
+Node: 0         to node:9       char:e
+Node: 1         to node:2       char:e
+Node: 1         to node:6       char:e
+Node: 2         to node:3       char:e
+Node: 3         to node:4       char:a
+Node: 4         to node:5       char:e
+Node: 5         to node:12      char:e
+Node: 6         to node:7       char:b
+Node: 7         to node:8       char:e
+Node: 8         to node:12      char:e
+Node: 9         to node:10      char:c
+Node: 10                to node:11      char:e
+Node: 11                to node:12      char:e
+Node: 12                to node:None    char:None
+##########EOF############
+
+a*|b*|c*
+Node: 0         to node:1       char:e
+Node: 0         to node:9       char:e
+Node: 1         to node:2       char:e
+Node: 1         to node:6       char:e
+Node: 2         to node:3       char:e
+Node: 3         to node:4       char:a
+Node: 3         to node:5       char:e
+Node: 4         to node:5       char:e
+Node: 4         to node:3       char:e
+Node: 5         to node:12      char:e
+Node: 6         to node:7       char:b
+Node: 6         to node:8       char:e
+Node: 7         to node:8       char:e
+Node: 7         to node:6       char:e
+Node: 8         to node:12      char:e
+Node: 9         to node:10      char:c
+Node: 9         to node:11      char:e
+Node: 10                to node:11      char:e
+Node: 10                to node:9       char:e
+Node: 11                to node:12      char:e
+Node: 12                to node:None    char:None
+##########EOF############
+
+(ax|b)|c
+Node: 0         to node:0       char:e
+Node: 0         to node:13      char:e
+Node: 1         to node:2       char:e
+Node: 2         to node:3       char:e
+Node: 2         to node:9       char:e
+Node: 3         to node:4       char:e
+Node: 4         to node:5       char:a
+Node: 5         to node:6       char:e
+Node: 6         to node:7       char:x
+Node: 7         to node:8       char:e
+Node: 8         to node:12      char:e
+Node: 9         to node:10      char:b
+Node: 10                to node:11      char:e
+Node: 11                to node:12      char:e
+Node: 12                to node:16      char:e
+Node: 13                to node:14      char:c
+Node: 14                to node:15      char:e
+Node: 15                to node:16      char:e
+Node: 16                to node:None    char:None
+##########EOF############
+
+(ax|b)|(c|re)
