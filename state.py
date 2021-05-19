@@ -2,6 +2,7 @@ import valide, parse
 from collections import deque
 import sys
 import copy
+import jsonify
 
 class Node:
     def __init__(self, start=False, end=False, left_rb=False, right_rb=False, 
@@ -225,6 +226,8 @@ def or_within(txt, y, x):
     for i in range (y,x):
         if txt[i] == "|": return True
     return False
+
+
 def state(txt):
     global i, main_list, eps, first_node
 
@@ -235,7 +238,7 @@ def state(txt):
     pairs = pair_me(txt)
 
     for itr,ch in enumerate(txt):
-        print(ch)
+        
         if ch == "(":
             if not first_bracket: 
                 rb_stack.append(first_node)
@@ -283,7 +286,6 @@ def state(txt):
         else:
             concatenate(ch)
             
-        print_main_list()
         
         
 
@@ -297,21 +299,20 @@ if __name__ == "__main__":
     spare_list = []
     # txt = str(input("Insert RE:\n"))
     # valide.validate(txt)
-    txt = "(ax|b)|(c|re)"
+    txt = "ab"
 
     txt = parse.parse(txt)
-    print(txt)
+    # print(txt)
     init_nodes()
     
     state(txt)
-    print_main_list(short=False)
-    print_main_list(short=True)
+    # print_main_list(short=False)
+    # print_main_list(short=True)
+
+    jsonify.jsonify(main_list)
     
 
     
-
-
-
 '''
     Correct Test cases:
         a|b
