@@ -118,14 +118,3 @@ def validate(txt):
         return False
     
     return True
-
-
-
-
-
-
-
-
-# if __name__ == "__main__":
-#     txt = str(input("Insert RE:\n"))
-#     print(validate(txt))

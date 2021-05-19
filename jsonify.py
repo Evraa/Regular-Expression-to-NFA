@@ -7,7 +7,7 @@ import pprint
 
 def jsonify(main_list):
 
-    main_str = '{ "startingState": "S0"'
+    main_str = '{ "startingState": "node_0"'
     for node in main_list:
         main_str += f', "node_{str(node.id)}":'
 
@@ -20,5 +20,6 @@ def jsonify(main_list):
     main_str += "}"
 
     y = json.loads(main_str)
+    print ("JSON format:")
     pprint.pprint (y)
     

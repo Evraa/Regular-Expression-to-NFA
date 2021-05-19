@@ -1,7 +1,4 @@
-import enum
 import re
-from typing import NewType
-import valide
 from collections import deque
 
 
@@ -114,11 +111,3 @@ def parse(txt):
     txt = remove_repeated_brackets(txt)
 
     return (txt)
-
-
-# if __name__ == "__main__":
-    # txt = str(input("Insert RE:\n"))
-    # valide.validate(txt)
-    # txt = "((((a)|(B))))"
-    # parse(txt)
-    

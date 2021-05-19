@@ -2,6 +2,7 @@ import valide, parse
 from collections import deque
 import copy
 import jsonify
+import graph
 
 class Node:
     def __init__(self, start=False, end=False, left_rb=False, right_rb=False, 
@@ -285,30 +286,38 @@ def state(txt):
         else:
             concatenate(ch)
             
-        
+
+
+def read_input():
+    print ("Please enter a valid RE")
+    print ("To exit press ctrl+c")
+    txt = str(input("RE:\t\t"))
+    return txt
         
 
 if __name__ == "__main__":
-    #Globals
-    main_list = []
-    i = 0
-    eps = 'e'
-    # main_list[-1] = None
-    first_node = None
-    spare_list = []
-    # txt = str(input("Insert RE:\n"))
-    # valide.validate(txt)
-    txt = "ab"
-
-    txt = parse.parse(txt)
-    # print(txt)
-    init_nodes()
+    print ("\t\tWelcome\n\n")
     
-    state(txt)
-    # print_main_list(short=False)
-    # print_main_list(short=True)
+    while True:
+        #Globals
+        main_list = []
+        i = 0
+        eps = 'eps'
+        first_node = None
+        spare_list = []
+        txt = read_input()
+        while not valide.validate(txt):
+            txt = read_input()
 
-    jsonify.jsonify(main_list)
+        txt = parse.parse(txt)
+
+        print (f'Text after parsing: {txt}')
+
+        init_nodes()
+        state(txt)
+        
+        jsonify.jsonify(main_list)
+        graph.graph(main_list)
     
 
     
