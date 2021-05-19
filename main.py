@@ -282,6 +282,7 @@ def state(txt):
     last_closed_open_bracket = None
 
     for itr,ch in enumerate(txt):
+        print (ch)
         if ch == "(":
             if not first_bracket: 
                 rb_stack.append(first_node)
@@ -336,7 +337,14 @@ def state(txt):
             # check for existing OR
             itr_2 = itr-1
             found_open_or = False
-            while itr_2 >0 and txt[itr_2]!= "(" and txt[itr_2]!= ")":
+            close_count = 0
+            while itr_2 >0:
+                if txt[itr_2] == ")": close_count +=1
+                if txt[itr_2] == "(":
+                    if close_count == 0:
+                        break
+                    else:
+                        close_count -=1
                 if txt[itr_2] == "|":
                     found_open_or = True
                     break
@@ -347,10 +355,9 @@ def state(txt):
             else:
                 new_main_or_id = oring(last_open_bracket)
                 new_main_or_id_list.append(new_main_or_id)
-
-            
         else:
             concatenate(ch)
+        graph.graph(main_list)
         
 
 def read_input():
@@ -370,8 +377,8 @@ if __name__ == "__main__":
         eps = 'eps'
         first_node = None
         spare_list = []
-        # txt = read_input()
-        txt = "( (a|x) |b)|(c|d)"
+        # txt = "a*|b*|c*"
+        txt = read_input()
         while not valide.validate(txt):
             txt = read_input()
 
@@ -384,7 +391,7 @@ if __name__ == "__main__":
         
         jsonify.jsonify(main_list)
         graph.graph(main_list)
-        exit = True
+        # exit = True
 
     
 '''
