@@ -130,8 +130,15 @@ def asterisk(last_open_bracket):
 def shift_update_first():
     global main_list, first_node, eps, i, spare_list
     first_node.start = False
-    s0 = Node(id=0, start=True, left_rb=False, main_or=True)
-    s0.add_child(first_node, eps)
+    first_node.left_rb = False
+
+    s0 = Node(id=0, start=True, left_rb=True, main_or=True)
+    s0.add_child(main_list[0], eps)
+
+    first_node = s0
+
+
+
     spare_list = []
     spare_list.append(s0)
 
@@ -188,7 +195,6 @@ def oring(last_open_bracket) -> None:
     
     if last_open_bracket == first_node: 
         new_main_or_id = shift_update_first()
-        
     else:
         new_main_or_id = shift_update(last_open_bracket)
     i += 1
@@ -203,8 +209,32 @@ def oring(last_open_bracket) -> None:
 
     main_list.append(new_last)
     i += 1
+
+    second_last = Node(id=i)
+    new_last.add_child(second_last, eps)
+    i += 1
+    main_list.append(second_last)
+    
     return new_main_or_id
 
+
+def oring_2(last_or_id):
+    global main_list, first_node,  eps, i
+    
+    s0 = Node(id=i)
+    main_list[-1].opened_to = last_or_id
+    main_list[last_or_id].add_child(s0, eps)
+    i += 1
+    main_list.append(s0)
+
+    second_last = Node(id=i)
+    s0.add_child(second_last, eps)
+    i += 1
+    main_list.append(second_last)
+
+    return
+    
+    
 
 def pair_me(txt):
     rb_stack = deque()
@@ -290,12 +320,25 @@ def state(txt):
             
         
         elif ch == "|":
-            new_main_or_id = oring(last_open_bracket)
-            new_main_or_id_list.append(new_main_or_id)
+            # check for existing OR
+            itr_2 = itr-1
+            found_open_or = False
+            while itr_2 >0 and txt[itr_2]!= "(" and txt[itr_2]!= ")":
+                if txt[itr_2] == "|":
+                    found_open_or = True
+                    break
+                itr_2 -= 1
+
+            if found_open_or:
+                oring_2(new_main_or_id_list[-1])
+            else:
+                new_main_or_id = oring(last_open_bracket)
+                new_main_or_id_list.append(new_main_or_id)
+            
             
         else:
             concatenate(ch)
-            
+        graph.graph(main_list)
 
 
 def read_input():
