@@ -236,6 +236,7 @@ def state(txt):
     last_open_bracket = first_node
     new_main_or_id_list = []
     pairs = pair_me(txt)
+    txt_length = len(txt)
 
     for itr,ch in enumerate(txt):
         
@@ -271,7 +272,7 @@ def state(txt):
                 if len(rb_stack) != 0:
                     last_open_bracket = rb_stack[-1]
 
-                if len(rb_stack) <= 1:
+                if len(rb_stack) <= 1 and txt_length - itr <= 1:
                     terminate()
                 else:
                     last_open_bracket = rb_stack[-1]
