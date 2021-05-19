@@ -43,19 +43,27 @@ def init_nodes():
     # main_list[-1] = s1
     
 
-def print_main_list(short=True):
+def print_main_list(listy = None, short=True):
 
     global main_list
-
-    for n in main_list:
-        if short:
-            for c in n.children:
-                print (f'Node: {n.id}\t\tto node:{c[0].id}\tchar:{c[1]}')
-            if len(n.children) == 0:
-                print (f'Node: {n.id}\t\tto node:None\tchar:None')
-        else:
-            print (f'Node: {n.id}\t\tStart:{n.start}\tEnd:{n.end}\tLeft RB:{n.left_rb}\tRight RB:{n.right_rb}\tMain OR:{n.main_or}\tOpen OR:{n.open_or}\t')
-
+    if listy is None:
+        for n in main_list:
+            if short:
+                for c in n.children:
+                    print (f'Node: {n.id}\t\tto node:{c[0].id}\tchar:{c[1]}')
+                if len(n.children) == 0:
+                    print (f'Node: {n.id}\t\tto node:None\tchar:None')
+            else:
+                print (f'Node: {n.id}\t\tStart:{n.start}\tEnd:{n.end}\tLeft RB:{n.left_rb}\tRight RB:{n.right_rb}\tMain OR:{n.main_or}\tOpen OR:{n.open_or}\t')
+    else:
+        for n in listy:
+            if short:
+                for c in n.children:
+                    print (f'Node: {n.id}\t\tto node:{c[0].id}\tchar:{c[1]}')
+                if len(n.children) == 0:
+                    print (f'Node: {n.id}\t\tto node:None\tchar:None')
+            else:
+                print (f'Node: {n.id}\t\tStart:{n.start}\tEnd:{n.end}\tLeft RB:{n.left_rb}\tRight RB:{n.right_rb}\tMain OR:{n.main_or}\tOpen OR:{n.open_or}\t')
     print ("##########EOF############\n")
 
 
@@ -154,33 +162,37 @@ def shift_update_first():
 
 def shift_update(last_open_bracket):
     global main_list, first_node,  eps, i, spare_list
-    
-    s0 = Node(id=last_open_bracket.id, main_or=True)
+    ID = last_open_bracket.id
+            
+    s0 = Node(id=ID, main_or=True)
+
     s0.add_child(last_open_bracket, eps)
+    
+    
     spare_list = []
-
     for itr,n in enumerate(main_list):
-
-        if itr < last_open_bracket.id:
+        
+        if itr < ID:
             for c in n.children:
-                if c[0].id == last_open_bracket.id:
-                    n.remove_child(last_open_bracket.id)
+                if c[0].id == ID:
+                    n.remove_child(ID)
                     n.add_child(s0, eps)
+    
 
-            spare_list.append(n)
+            spare_list.append(n)    
 
-        elif itr == last_open_bracket.id:
-            spare_list.append(s0)
-            spare_list.append(last_open_bracket)
+        elif itr == ID:
+            # last_open_bracket.id += 1
+            spare_list.append(s0)            
+            n.id += 1
+            spare_list.append(n)   
 
-        elif itr > last_open_bracket.id:
+        elif itr > ID:
             n.id += 1
             spare_list.append(n)
-
-    last_open_bracket.id += 1
+    
     main_list.clear()
     main_list = copy.deepcopy(spare_list)
-
     
     return s0.id
 
@@ -193,7 +205,7 @@ def oring(last_open_bracket) -> None:
 
     #stuffing and shifting
     
-    if last_open_bracket == first_node: 
+    if last_open_bracket.id == 0: 
         new_main_or_id = shift_update_first()
     else:
         new_main_or_id = shift_update(last_open_bracket)
@@ -275,8 +287,8 @@ def state(txt):
                 rb_stack.append(first_node)
                 first_bracket = True
             else:
-                last_open_bracket = main_list[-1]
                 left_bracket()
+                last_open_bracket = main_list[-1]
                 rb_stack.append(main_list[-1])
             
         elif ch == ")":
@@ -300,15 +312,16 @@ def state(txt):
                 if txt_length - itr > 1:
                     if txt[itr+1] == "*":
                         last_closed_open_bracket = last_open_bracket
-                last_open_bracket.left_rb = False
+                main_list[last_open_bracket.id].left_rb = False
+                # last_open_bracket.left_rb = False
                 rb_stack.pop()
                 if len(rb_stack) != 0:
-                    last_open_bracket = rb_stack[-1]
+                    last_open_bracket = main_list[rb_stack[-1].id]
 
                 if len(rb_stack) <= 1 and txt_length - itr <= 1:
                     terminate()
                 else:
-                    last_open_bracket = rb_stack[-1]
+                    last_open_bracket =  main_list[rb_stack[-1].id]
 
         elif ch == "*":
             if last_closed_open_bracket is not None:
@@ -334,12 +347,11 @@ def state(txt):
             else:
                 new_main_or_id = oring(last_open_bracket)
                 new_main_or_id_list.append(new_main_or_id)
-            
+
             
         else:
             concatenate(ch)
-        graph.graph(main_list)
-
+        
 
 def read_input():
     print ("Please enter a valid RE")
@@ -350,15 +362,16 @@ def read_input():
 
 if __name__ == "__main__":
     print ("\t\tWelcome\n\n")
-    
-    while True:
+    exit = False
+    while not exit:
         #Globals
         main_list = []
         i = 0
         eps = 'eps'
         first_node = None
         spare_list = []
-        txt = read_input()
+        # txt = read_input()
+        txt = "( (a|x) |b)|(c|d)"
         while not valide.validate(txt):
             txt = read_input()
 
@@ -371,7 +384,7 @@ if __name__ == "__main__":
         
         jsonify.jsonify(main_list)
         graph.graph(main_list)
-    
+        exit = True
 
     
 '''

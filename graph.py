@@ -9,11 +9,20 @@ def graph(main_list):
     dot  #doctest: +ELLIPSIS
     dot.attr(rankdir="LR")
     for node in main_list:
+
         node_name = "node_"+str(node.id)
+
+
         if node.end:
             dot.attr('node', shape="doublecircle")
         else:
             dot.attr('node', shape="circle")
+
+        # if node.left_rb == True:
+        #     dot.attr('node', shape="star")
+        # else:
+        #     dot.attr('node', shape="circle")
+
         dot.node(node_name,node_name)
 
     dot.attr('node', shape="plaintext")
