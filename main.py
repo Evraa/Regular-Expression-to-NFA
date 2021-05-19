@@ -282,7 +282,7 @@ def state(txt):
     last_closed_open_bracket = None
 
     for itr,ch in enumerate(txt):
-        print (ch)
+        # print (ch)
         if ch == "(":
             if not first_bracket: 
                 rb_stack.append(first_node)
@@ -357,7 +357,7 @@ def state(txt):
                 new_main_or_id_list.append(new_main_or_id)
         else:
             concatenate(ch)
-        graph.graph(main_list)
+        # graph.graph(main_list)
         
 
 def read_input():
