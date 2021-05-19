@@ -237,9 +237,9 @@ def state(txt):
     new_main_or_id_list = []
     pairs = pair_me(txt)
     txt_length = len(txt)
+    last_closed_open_bracket = None
 
     for itr,ch in enumerate(txt):
-        
         if ch == "(":
             if not first_bracket: 
                 rb_stack.append(first_node)
@@ -267,6 +267,9 @@ def state(txt):
                 else:
                     right_bracket(None)
                 
+                if txt_length - itr > 1:
+                    if txt[itr+1] == "*":
+                        last_closed_open_bracket = last_open_bracket
                 last_open_bracket.left_rb = False
                 rb_stack.pop()
                 if len(rb_stack) != 0:
@@ -278,7 +281,13 @@ def state(txt):
                     last_open_bracket = rb_stack[-1]
 
         elif ch == "*":
-            asterisk(last_open_bracket)
+            if last_closed_open_bracket is not None:
+                asterisk(last_closed_open_bracket)
+                last_closed_open_bracket = None
+
+            else:
+                asterisk(last_open_bracket)
+            
         
         elif ch == "|":
             new_main_or_id = oring(last_open_bracket)
