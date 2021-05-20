@@ -10,7 +10,7 @@ def graph(main_list):
     dot.attr(rankdir="LR")
     for node in main_list:
 
-        node_name = "node_"+str(node.id)
+        node_name = "S"+str(node.id)
 
 
         if node.end:
@@ -18,22 +18,17 @@ def graph(main_list):
         else:
             dot.attr('node', shape="circle")
 
-        # if node.left_rb == True:
-        #     dot.attr('node', shape="star")
-        # else:
-        #     dot.attr('node', shape="circle")
-
         dot.node(node_name,node_name)
 
     dot.attr('node', shape="plaintext")
     dot.node("start","start")
 
-    dot.edge(head_name="node_0", tail_name="start")
+    dot.edge(head_name="S0", tail_name="start")
 
     for node in main_list:
-        node_name = "node_"+str(node.id)
+        node_name = "S"+str(node.id)
         for child in node.children:
-            child_name = "node_"+str(child[0].id)
+            child_name = "S"+str(child[0].id)
             dot.edge(node_name, child_name, label=child[1])
 
     # print(dot.source) 

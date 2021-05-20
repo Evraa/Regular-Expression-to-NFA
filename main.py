@@ -362,7 +362,7 @@ def state(txt):
 
 def read_input():
     print ("Please enter a valid RE")
-    print ("To exit press ctrl+c")
+    print ("To exit press ctrl+z")
     txt = str(input("RE:\t\t"))
     return txt
         
@@ -371,22 +371,27 @@ if __name__ == "__main__":
     print ("\t\tWelcome\n\n")
     exit = False
     while not exit:
-        #Globals
-        main_list = []
-        i = 0
-        eps = 'eps'
-        first_node = None
-        spare_list = []
-        txt = read_input()
-        while not valide.validate(txt):
+        try:
+            #Globals
+            main_list = []
+            i = 0
+            eps = 'eps'
+            first_node = None
+            spare_list = []
             txt = read_input()
+            while not valide.validate(txt):
+                txt = read_input()
 
-        txt = parse.parse(txt)
+            txt = parse.parse(txt)
 
-        print (f'Text after parsing: {txt}')
+            print (f'Text after parsing: {txt}')
 
-        init_nodes()
-        state(txt)
-        
-        jsonify.jsonify(main_list)
-        graph.graph(main_list)
+            init_nodes()
+            state(txt)
+            
+            jsonify.jsonify(main_list)
+            graph.graph(main_list)
+
+        except:
+            print ("Unknown error occured!")
+            print ("Make sure you follow the README.md file.")
