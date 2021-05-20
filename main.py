@@ -377,7 +377,6 @@ if __name__ == "__main__":
         eps = 'eps'
         first_node = None
         spare_list = []
-        # txt = "a*|b*|c*"
         txt = read_input()
         while not valide.validate(txt):
             txt = read_input()
@@ -391,18 +390,3 @@ if __name__ == "__main__":
         
         jsonify.jsonify(main_list)
         graph.graph(main_list)
-        # exit = True
-
-    
-'''
-    Correct Test cases:
-        a|b
-        a*|b
-        a*|b*
-        a|b|c
-        a*|b|c
-        a*|b*|c
-        a*|b*|c*
-        (ax|b)|c
-        
-'''

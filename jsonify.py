@@ -20,6 +20,6 @@ def jsonify(main_list):
     main_str += "}"
 
     y = json.loads(main_str)
-    # print ("JSON format:")
-    # pprint.pprint (y)
+    print ("JSON format:")
+    pprint.pprint (y)
     
