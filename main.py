@@ -345,7 +345,7 @@ def state(txt):
                         break
                     else:
                         close_count -=1
-                if txt[itr_2] == "|":
+                if txt[itr_2] == "|" and close_count == 0:
                     found_open_or = True
                     break
                 itr_2 -= 1
@@ -378,7 +378,8 @@ if __name__ == "__main__":
             eps = 'eps'
             first_node = None
             spare_list = []
-            txt = read_input()
+            # txt = read_input()
+            txt = "(a|b)|(c|d)"
             while not valide.validate(txt):
                 txt = read_input()
 

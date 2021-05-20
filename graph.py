@@ -32,4 +32,4 @@ def graph(main_list):
             dot.edge(node_name, child_name, label=child[1])
 
     # print(dot.source) 
-    dot.render('test-output/round-table.gv', view=True)
+    dot.render('test-output/round-table.gv', view=True, format="png")
