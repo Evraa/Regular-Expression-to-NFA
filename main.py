@@ -378,8 +378,7 @@ if __name__ == "__main__":
             eps = 'eps'
             first_node = None
             spare_list = []
-            # txt = read_input()
-            txt = "(a|b)|(c|d)"
+            txt = read_input()
             while not valide.validate(txt):
                 txt = read_input()
 
